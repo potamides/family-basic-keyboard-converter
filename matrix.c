@@ -33,6 +33,8 @@
 #define D4_PIN_REG PINB
 
 static uint8_t matrix[MATRIX_ROWS];
+static uint8_t matrix_debouncing[MATRIX_ROWS];
+static uint8_t debouncing = 0;
 
 void matrix_init(void)
 {
@@ -57,6 +59,7 @@ void matrix_init(void)
     // Initialize matrix state: all keys off
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         matrix[i] = 0x00;
+        matrix_debouncing[i] = 0x00;
     }
 }
 
@@ -115,7 +118,27 @@ uint8_t matrix_scan(void)
         // Step 5: Read column 1 data (4 bits)
         uint8_t col1_data = read_column_data();
 
-        matrix[row] = (col1_data << 4) | col0_data;
+        matrix_debouncing[row] = (col1_data << 4) | col0_data;
+    }
+
+    // Handle debouncing
+    if (debouncing) {
+        if (--debouncing) {
+            _delay_ms(1);
+        } else {
+            // Update the actual matrix
+            for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
+                matrix[i] = matrix_debouncing[i];
+            }
+        }
+    } else {
+        // Check if anything changed
+        for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
+            if (matrix[i] != matrix_debouncing[i]) {
+                debouncing = DEBOUNCE_MS;
+                break;
+            }
+        }
     }
 
     return 1;

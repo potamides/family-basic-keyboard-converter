@@ -31,6 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_ROWS 9
 #define MATRIX_COLS 8
 
+/* debouncing */
+#define DEBOUNCE_MS 5
 
 /* USART configuration
  *     asynchronous, 2400baud, 8-data bit, even parity, 1-stop bit, no flow control
