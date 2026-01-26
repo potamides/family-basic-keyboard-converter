@@ -19,7 +19,7 @@ Make sure you have [avr-gcc](https://gcc.gnu.org/wiki/avr-gcc),
 [avrdude](http://savannah.nongnu.org/projects/avrdude) installed. Then clone
 the repository with the following command:
 ```sh
-git clone --recurse-submodules https://github.com/potamides/siemens-pc16-11-converter
+git clone --recurse-submodules https://github.com/potamides/family-basic-keyboard-converter
 ```
 To build the firmware and program the controller change into the project
 directory and run these commands:
